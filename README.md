@@ -1,3 +1,3 @@
 # Otus
 
-This folder contains a bunch of microservices and cicd pipeline configuration 
+This folder contains a bunch of microservices and CICD pipeline configuration.
