@@ -1,0 +1,29 @@
+worker_processes 1;
+events {
+    worker_connections 1024;
+}
+http {
+
+    upstream frontend {
+        {{range service "frontend"}}
+        server {{.Address}}:{{.Port}};
+        {{end}}    
+    }
+
+    lua_package_path "/usr/local/nginx-jwt/?.lua;/usr/local/openresty/lualib/?.lua;;/usr/local/openresty/nginx/?.lua;;";     
+    limit_req_zone $binary_remote_addr zone=one:10m rate=30r/m;
+    
+    server {    
+        listen 8585;
+        root /usr/share/nginx/html/;
+        index index.php index.html;
+        
+        location / {
+            proxy_pass http://frontend;        
+        }
+        
+        location ~ /\.ht {
+            deny all;        
+        }   
+    }
+}
