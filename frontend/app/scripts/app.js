@@ -35,11 +35,11 @@ angular
   })
   .run(['$rootScope', '$location', '$http', '$window', function($rootScope, $location, $http, $window) {
     $rootScope.localStorage = $window.localStorage;
-    if ($rootScope.localStorage.getItem("token")) {
-      $http.defaults.headers.common['Authorization'] = 'Bearer ' + $rootScope.localStorage.getItem("token");     
+    if ($rootScope.localStorage.getItem('token')) {
+      $http.defaults.headers.common.Authorization = 'Bearer ' + $rootScope.localStorage.getItem('token');     
     }
-    $rootScope.$on('$locationChangeStart', function (event, next, current) {
-      if ($location.path() !== '/login' && !$rootScope.localStorage.getItem("token")) {
+    $rootScope.$on('$locationChangeStart', function () {
+      if ($location.path() !== '/login' && !$rootScope.localStorage.getItem('token')) {
         $location.path('/login');
       }
     });

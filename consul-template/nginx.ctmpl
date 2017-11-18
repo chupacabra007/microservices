@@ -1,7 +1,9 @@
 worker_processes 1;
+
 events {
     worker_connections 1024;
 }
+
 http {
 
     upstream frontend {
@@ -9,9 +11,17 @@ http {
         server {{.Address}}:{{.Port}};
         {{end}}    
     }
+    
+    #upstream users {
+    #    {{range service "users"}}
+    #    server {{.Address}}:{{.Port}};
+    #    {{end}}    
+    #}
 
     lua_package_path "/usr/local/nginx-jwt/?.lua;/usr/local/openresty/lualib/?.lua;;/usr/local/openresty/nginx/?.lua;;";     
     limit_req_zone $binary_remote_addr zone=one:10m rate=30r/m;
+    
+    init_by_lua_file "waf_init.lua";
     
     server {    
         listen 8585;
@@ -19,6 +29,7 @@ http {
         index index.php index.html;
         
         location / {
+            access_by_lua_file "waf_exec.lua";
             proxy_pass http://frontend;        
         }
         
