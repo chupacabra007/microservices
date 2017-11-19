@@ -1,0 +1,9 @@
+{
+  "require": {
+    "doctrine/orm": "*",
+    "ramsey/uuid": "*",
+    "ramsey/uuid-doctrine": "*",
+    "firebase/php-jwt": "*",
+    "predis/predis": "*"
+  }
+}

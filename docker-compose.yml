@@ -3,12 +3,23 @@ services:
     frontend:
         build:
             context: ./frontend
+        image: frontend
         restart: always
         ports:
             - 80
         cgroup_parent: main
         environment:
-            - SERVICE_80_NAME=frontend 
+            - SERVICE_80_NAME=frontend
+    users:
+        build:
+            context: ./users
+        image: users
+        restart: always
+        ports:
+            - 80 
+        cgroup_parent: main
+        environment:
+            - SERVICE_80_NAME=users
     consul:
         image: gliderlabs/consul-server:latest
         container_name: consul
