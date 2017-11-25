@@ -10,6 +10,8 @@ services:
         cgroup_parent: main
         environment:
             - SERVICE_80_NAME=frontend
+        depends_on:
+            - registrator
     users:
         build:
             context: ./users
@@ -20,6 +22,8 @@ services:
         cgroup_parent: main
         environment:
             - SERVICE_80_NAME=users
+        depends_on:
+            - registrator
     consul:
         image: gliderlabs/consul-server:latest
         container_name: consul
@@ -63,3 +67,6 @@ services:
             - /usr/local/openresty/nginx/conf
         ports:
             - 8585:8585
+        depends_on:
+            - users
+            - frontend
