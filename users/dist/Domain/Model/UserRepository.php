@@ -2,6 +2,8 @@
 
 namespace users\Domain\Model;
 
+
+
 interface UserRepository
 {
 
@@ -9,10 +11,17 @@ interface UserRepository
      * @return ObjectId
      */
     public function nextIdentity();
+    
 
     /**
      * @return list of users
      */
-    public function list();
+    public function listUsers();
+    
+    
+    /**
+     * @return user as an array
+     */
+    public function byCredentials($login, $password);
 
 }

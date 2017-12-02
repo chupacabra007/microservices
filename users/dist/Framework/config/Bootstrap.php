@@ -6,7 +6,8 @@ use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Url as UrlResolver;
 use Phalcon\Config\Adapter\Ini as Config;
 use users\Infrastructure\Service\JWTService;
-use users\Infrastructure\Service\HashingService;
+
+
 
 class Bootstrap
 {
@@ -68,7 +69,6 @@ class Bootstrap
                 return $cookies;
             }
         );
-
 
     }
 
@@ -152,6 +152,15 @@ class Bootstrap
                 'namespace'  => 'users\Application\Controller',
                 'controller' => 'index',
                 'action'     => 'index'
+            ]
+        );
+        
+        $router->add(
+            '/authenticate',
+            [
+                'namespace'  => 'users\Application\Controller',
+                'controller' => 'index',
+                'action'     => 'authenticate'
             ]
         );
         

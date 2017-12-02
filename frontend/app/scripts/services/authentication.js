@@ -1,6 +1,6 @@
 'use strict';
  
-angular.module('Authentication')
+angular.module('frontendApp')
  
 .factory('AuthenticationService',
     ['$http', '$rootScope', 
@@ -8,8 +8,11 @@ angular.module('Authentication')
         var service = {};
 
         service.Login = function (username, password) {
+        	   console.log(username, password);
             $http.post('/users/authenticate', { username: username, password: password })
-                .success(function (response) {
+                .then(function onSuccess(response) {
+                    console.log(response);
+                }, function onError (response) {
                     console.log(response);
                 });
         };
@@ -20,7 +23,7 @@ angular.module('Authentication')
         };
  
         service.ClearCredentials = function () {
-            $rootScope.removeItem('toke');
+            $rootScope.localStorage.removeItem('token');
             $http.defaults.headers.common.Authorization = 'Bearer ';
         };
  

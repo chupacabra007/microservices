@@ -4,16 +4,13 @@ angular.module('frontendApp')
   .controller('LoginCtrl',
     ['$scope', 'AuthenticationService',
      function ($scope, AuthenticationService) {
-        var vm = this;
-
         AuthenticationService.ClearCredentials();        
             	  
     	  $scope.login = function() {
-    	      vm.dataLoading = true;
-    	      
-    	      AuthenticationService.Login(vm.username, vm.password, function (response) {
+    	      $scope.dataLoading = true;
+    	      AuthenticationService.Login($scope.username, $scope.password, function (response) {
     	          console.log(response);
-    	          vm.dataLoading = false;
+    	          $scope.dataLoading = false;
     	      });
     	      
     	  };    	  
