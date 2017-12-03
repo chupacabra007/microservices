@@ -38,9 +38,14 @@ class IndexController extends Controller {
     	  
         $query = new Queries($this->em);
         $success = $query->userExists($login, $password);
+
+     
+        if ($success) {
+            $token = $this->JWTService->getToken($login);
+        }
         
         $response = new Response();
-        $response->setJsonContent(['success' => $success]);
+        $response->setJsonContent(['success' => $success, 'token' => $token]);
         return $response;
     }    
    

@@ -3,17 +3,15 @@
 angular.module('frontendApp')
  
 .factory('AuthenticationService',
-    ['$http', '$rootScope', 
-     function ($http, $rootScope) {
+    ['$http', '$rootScope', '$location', 
+     function ($http, $rootScope, $location) {
         var service = {};
 
         service.Login = function (username, password) {
-        	   console.log(username, password);
-            $http.post('/users/authenticate', { username: username, password: password })
+        	   $http.post('/users/authenticate', { username: username, password: password })
                 .then(function onSuccess(response) {
-                    console.log(response);
-                }, function onError (response) {
-                    console.log(response);
+                	  service.SetCredentials(response.data.token);
+                	  $location.path('/');
                 });
         };
  
