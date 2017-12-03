@@ -2,9 +2,13 @@
 
 use Phalcon\Mvc\Application;
 use Phalcon\Mvc\View;
+use Phalcon\Events\Event;
+use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Url as UrlResolver;
 use Phalcon\Config\Adapter\Ini as Config;
+
+use users\Framework\BodyParser;
 use users\Infrastructure\Service\JWTService;
 
 
@@ -36,7 +40,8 @@ class Bootstrap
             'users\Domain\Model' => '../../Domain/Model/',
             'users\Infrastructure\Persistence' => '../../Infrastructure/Persistence/',
             'users\Infrastructure\Model' => '../../Infrastructure/Model/',
-            'users\Infrastructure\Service' => '../../Infrastructure/Service/'
+            'users\Infrastructure\Service' => '../../Infrastructure/Service/',
+            'users\Framework' => '../config/'
         ])->register();
 
     }
@@ -46,10 +51,14 @@ class Bootstrap
         $config = $this->config();
 
         $di->setShared('url', $this->url($config));
-
+        
+        $di->set('eventsManager', function () {
+            return new EventsManager();
+        });
+       
         $di->set('view', $this->view($di));
 
-        $di->set('dispatcher', $this->dispatch());
+        $di->set('dispatcher', $this->dispatch($di));
 
         $di->set('entityManager', $this->entityManager($di, $config));
 
@@ -92,11 +101,14 @@ class Bootstrap
         return $view;
     }
 
-    private function dispatch()
+    private function dispatch($di)
     {
+        $eventsManager = $di->get('eventsManager');
+        $eventsManager->attach('dispatch:beforeExecuteRoute', new BodyParser());
         $dispatcher = new Dispatcher();
         $dispatcher->setDefaultNamespace('users\Application\Controller');
-        return $dispatcher;
+        $dispatcher->setEventsManager($eventsManager);
+        return $dispatcher;       
     }
 
     private function privateKey($filePath)

@@ -50,7 +50,10 @@ class DoctrineUserRepository implements UserRepository
      */
     public function byCredentials($login, $password)
     {
-    	  return $login;
+    	  return $this->em->getRepository('users\Infrastructure\Model\DoctrineUser')->findBy([
+            'login' => $login,
+            'password' => $password    	  
+    	  ]);
     }
 
 }

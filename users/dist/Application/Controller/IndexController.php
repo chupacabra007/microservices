@@ -33,7 +33,15 @@ class IndexController extends Controller {
     
     public function authenticateAction() 
     {
-        echo json_encode($_REQUEST);
-    }
-    
+    	  $login = $this->request->getPost('username');
+    	  $password = $this->request->getPost('password');
+    	  
+        $query = new Queries($this->em);
+        $success = $query->userExists($login, $password);
+        
+        $response = new Response();
+        $response->setJsonContent(['login' => $login, 'password' => $password]);
+        return $response;
+    }    
+   
 }

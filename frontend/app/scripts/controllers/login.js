@@ -7,10 +7,10 @@ angular.module('frontendApp')
         AuthenticationService.ClearCredentials();        
             	  
     	  $scope.login = function() {
-    	      $scope.dataLoading = true;
+    	      //$scope.dataLoading = true;
     	      AuthenticationService.Login($scope.username, $scope.password, function (response) {
     	          console.log(response);
-    	          $scope.dataLoading = false;
+    	          //$scope.dataLoading = false;
     	      });
     	      
     	  };    	  

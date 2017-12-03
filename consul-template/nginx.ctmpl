@@ -9,12 +9,16 @@ http {
     upstream frontend {
         {{range service "frontend"}}
         server {{.Address}}:{{.Port}};
+        {{else}}
+        127.0.0.1:8585
         {{end}}    
     }
         
     upstream users {
         {{range service "users"}}
         server {{.Address}}:{{.Port}};
+        {{else}}
+        127.0.0.1:8585
         {{end}}    
     }
 
