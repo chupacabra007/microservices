@@ -40,7 +40,7 @@ class IndexController extends Controller {
         $success = $query->userExists($login, $password);
         
         $response = new Response();
-        $response->setJsonContent(['login' => $login, 'password' => $password]);
+        $response->setJsonContent(['success' => $success]);
         return $response;
     }    
    

@@ -14,10 +14,10 @@ class BodyParser extends Plugin
 {
     public function beforeExecuteRoute(Event $event, Dispatcher $dispatcher)
     {
-        $contentType = $this->request->getHeader('CONTENT_TYPE');
+        $contentType = strtolower($this->request->getHeader('CONTENT_TYPE'));
         switch ($contentType) {
             case 'application/json':
-            case 'application/json;charset=UTF-8':
+            case 'application/json;charset=utf-8':
                 $jsonRawBody = $this->request->getJsonRawBody(true);
                 if ($this->request->getRawBody() && !$jsonRawBody) {
                     throw new Exception("Invalid JSON syntax");
