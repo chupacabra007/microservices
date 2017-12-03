@@ -25,21 +25,39 @@ http {
     lua_package_path "/usr/local/nginx-jwt/?.lua;/usr/local/openresty/lualib/?.lua;;/usr/local/openresty/nginx/?.lua;;";     
     limit_req_zone $binary_remote_addr zone=one:10m rate=30r/m;
     
-    init_by_lua_file "waf_init.lua";
-    
     server {    
         listen 8585;
         root /usr/share/nginx/html/;
         index index.php index.html;
         
         location / {
-            access_by_lua_file "waf_exec.lua";
             proxy_pass http://frontend;        
         }
         
         location /users/ {
+            rewrite_by_lua_file "validation.lua";
             rewrite ^/users^/ /$1 break;
             proxy_pass http://users/;
+            proxy_redirect off;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Host $server_name;
+        }
+        
+        location /users/login {
+            rewrite ^/users^/ /$1 break;
+            proxy_pass http://users/login;
+            proxy_redirect off;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Host $server_name;
+        }
+        
+        location /users/authenticate {
+            rewrite ^/users^/ /$1 break;
+            proxy_pass http://users/authenticate;
             proxy_redirect off;
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
