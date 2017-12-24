@@ -1,4 +1,1 @@
-# Otus
-
-
-This folder contains a bunch of microservices and CICD pipeline configuration.
+It's a template project based on microservices architecture.
